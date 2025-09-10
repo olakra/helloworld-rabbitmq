@@ -1,0 +1,21 @@
+{
+  "semi": true,
+  "singleQuote": true,
+  "trailingComma": "es5",
+  "printWidth": 100,
+  "tabWidth": 2,
+  "overrides": [
+    {
+      "files": "*.java",
+      "options": { "parser": "java" }
+    },
+    {
+      "files": "*.py",
+      "options": { "parser": "python" }
+    },
+    {
+      "files": "*.go",
+      "options": { "parser": "go" }
+    }
+  ]
+}
