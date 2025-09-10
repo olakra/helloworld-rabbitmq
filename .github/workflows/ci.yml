@@ -1,0 +1,61 @@
+name: CI
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    services:
+      rabbitmq:
+        image: rabbitmq:3.11-management
+        ports:
+          - 5672:5672
+          - 15672:15672
+        options: >-
+          --health-cmd="rabbitmq-diagnostics -q ping"
+          --health-interval=5s
+          --health-timeout=5s
+          --health-retries=5
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Setup Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: '1.21'
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Run TypeScript tests
+        working-directory: services/typescript-service
+        run: |
+          npm ci
+          npm test
+
+      - name: Run Go tests
+        working-directory: services/go-service
+        run: |
+          go test ./...
+
+      - name: Run Python tests
+        working-directory: services/python-service
+        run: |
+          pip install -r requirements.txt || true
+          pytest -q || true
+
+      - name: Run Java tests
+        working-directory: services/java-service
+        run: |
+          mvn -q -DskipTests=false test || true

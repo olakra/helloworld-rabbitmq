@@ -1,0 +1,67 @@
+# =========================
+# Line endings
+# =========================
+# Force text files to use LF line endings in repo
+* text=auto eol=lf
+
+# =========================
+# Source code
+# =========================
+*.ts    text diff=typescript
+*.tsx   text diff=typescript
+*.js    text
+*.jsx   text
+*.json  text
+*.md    text
+*.yml   text
+*.yaml  text
+*.sh    text eol=lf
+*.py    text diff=python
+*.go    text
+*.java  text diff=java
+*.xml   text
+*.toml  text
+*.gradle text
+*.properties text
+
+# =========================
+# Documentation
+# =========================
+*.md    text
+*.rst   text
+
+# =========================
+# Config / CI
+# =========================
+*.env       text
+Dockerfile  text
+*.dockerignore text
+.gitignore  text
+.gitattributes text
+
+# =========================
+# Binary files (no diff)
+# =========================
+*.png   binary
+*.jpg   binary
+*.jpeg  binary
+*.gif   binary
+*.ico   binary
+*.pdf   binary
+*.zip   binary
+*.tar   binary
+*.gz    binary
+*.tgz   binary
+*.jar   binary
+*.war   binary
+*.ear   binary
+
+# =========================
+# Special
+# =========================
+# Keep Makefiles in LF (important for Unix shells)
+Makefile text eol=lf
+*.mk     text eol=lf
+
+# Keep shell scripts in LF
+*.sh     text eol=lf
