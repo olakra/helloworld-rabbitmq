@@ -1,0 +1,17 @@
+[GLOBAL]
+pants_version = "2.16.1"
+backend_packages = [
+  "pants.backend.python",
+  "pants.backend.go",
+  "pants.backend.node",
+  "pants.backend.java"
+]
+
+[python]
+interpreter_constraints = [">=3.9,<3.12"]
+
+[go]
+# go settings; optional
+
+[buildroot]
+# default
