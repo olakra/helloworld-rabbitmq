@@ -17,15 +17,9 @@ services:
       - rabbitmq
     environment:
       - RABBITMQ_URL=amqp://guest:guest@rabbitmq:5672
-    command: ["make", "run"]
-
-  go-service:
-    build: ./services/go-service
-    depends_on:
-      - rabbitmq
-    environment:
-      - RABBITMQ_URL=amqp://guest:guest@rabbitmq:5672
-    command: ["./app"]
+    command: ["sh", "-c", "apk add --no-cache netcat-openbsd && sh /app/wait-for-rabbit.sh rabbitmq 5672 && node dist/index.js"]
+    volumes:
+      - ./tools/scripts/wait-for-rabbit.sh:/app/wait-for-rabbit.sh:ro
 
 volumes:
   rabbitmq_data:

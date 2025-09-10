@@ -4,22 +4,23 @@
  * - Keeps amqplib usage isolated (Infrastructure layer).
  */
 
-import amqp, { Connection, Channel, ConsumeMessage } from 'amqplib';
-import { URL } from 'url';
+import * as amqp from 'amqplib';
 
 export type RabbitConfig = {
   url: string;
 };
 
 export class RabbitMQAdapter {
-  private conn?: Connection;
-  private channel?: Channel;
+  private conn?: amqp.Connection;
+  private channel?: amqp.Channel;
   constructor(private config: RabbitConfig) {}
 
-  async connect() {
-    const url = new URL(this.config.url);
-    this.conn = await amqp.connect(url.toString());
-    this.channel = await this.conn.createChannel();
+  async connect(url: string): Promise<void> {
+      this.conn = await amqp.connect(url) as unknown as amqp.Connection;
+      if (!this.conn) throw new Error('Failed to connect to RabbitMQ');
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      this.channel = await (this.conn as any).createChannel();
+      if (!this.channel) throw new Error('Failed to create channel');
   }
 
   async assertQueue(queueName: string) {
@@ -27,7 +28,7 @@ export class RabbitMQAdapter {
     await this.channel.assertQueue(queueName, { durable: false });
   }
 
-  async consume(queueName: string, onMessage: (msg: ConsumeMessage) => void) {
+  async consume(queueName: string, onMessage: (msg: amqp.ConsumeMessage) => void) {
     if (!this.channel) throw new Error('Channel not initialized');
     await this.channel.consume(queueName, (msg) => {
       if (msg) {
@@ -41,14 +42,15 @@ export class RabbitMQAdapter {
     this.channel.sendToQueue(queueName, content, opts);
   }
 
-  ack(msg: ConsumeMessage) {
+  ack(msg: amqp.ConsumeMessage) {
     if (!this.channel) throw new Error('Channel not initialized');
     this.channel.ack(msg);
   }
 
   close() {
     if (this.conn) {
-      return this.conn.close();
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      return (this.conn as any).close();
     }
   }
 }

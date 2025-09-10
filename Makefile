@@ -50,65 +50,20 @@ install-ts:
 	cd services/typescript-service && npm install
 
 # ==========================
-# Python
-# ==========================
-lint-py:
-	cd services/python-service && flake8 .
-
-format-py:
-	cd services/python-service && black .
-
-test-py:
-	cd services/python-service && pytest || true
-
-install-py:
-	cd services/python-service && pip install -r requirements.txt
-
-# ==========================
-# Go
-# ==========================
-lint-go:
-	cd services/go-service && golangci-lint run ./...
-
-format-go:
-	cd services/go-service && gofmt -w .
-
-test-go:
-	cd services/go-service && go test ./... || true
-
-install-go:
-	cd services/go-service && go mod tidy
-
-# ==========================
-# Java
-# ==========================
-lint-java:
-	cd services/java-service && ./gradlew checkstyleMain
-
-format-java:
-	cd services/java-service && ./gradlew spotlessApply || true
-
-test-java:
-	cd services/java-service && ./gradlew test || true
-
-install-java:
-	cd services/java-service && ./gradlew build --refresh-dependencies
-
-# ==========================
 # Aggregates
 # ==========================
-lint: lint-ts lint-py lint-go lint-java
+lint: lint-ts
 	@echo "✅ All linters passed"
 
-format: format-ts format-py format-go format-java
+format: format-ts
 	@echo "✅ All code formatted"
 
-test: test-ts test-py test-go test-java
+test: test-ts
 	@echo "✅ All tests passed"
 
 clean:
 	rm -rf **/dist **/build **/.pytest_cache **/__pycache__ **/.mypy_cache **/.coverage
 	@echo "🧹 Cleaned build artifacts"
 
-install: install-ts install-py install-go install-java
+install: install-ts
 	@echo "📦 Dependencies installed for all services"

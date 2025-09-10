@@ -14,7 +14,7 @@ const RPC_QUEUE = 'rpc_queue';
 
 export async function createServer(rabbitUrl: string) {
   const adapter = new RabbitMQAdapter({ url: rabbitUrl });
-  await adapter.connect();
+  await adapter.connect(rabbitUrl);
   await adapter.assertQueue(RPC_QUEUE);
   console.log(' [x] Awaiting RPC requests');
 
