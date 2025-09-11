@@ -21,5 +21,15 @@ services:
     volumes:
       - ./tools/scripts/wait-for-rabbit.sh:/app/wait-for-rabbit.sh:ro
 
+  python-service:
+    build: ./services/python-service
+    depends_on:
+      - rabbitmq
+    environment:
+      - RABBITMQ_URL=amqp://guest:guest@rabbitmq:5672
+    command: ["sh", "-c", "sh /app/wait-for-rabbit.sh rabbitmq 5672 && python main.py"]
+    volumes:
+      - ./tools/scripts/wait-for-rabbit.sh:/app/wait-for-rabbit.sh:ro
+
 volumes:
   rabbitmq_data:

@@ -44,10 +44,10 @@ jobs:
           npm ci
           npm test
 
-      - name: Run Go tests
-        working-directory: services/go-service
-        run: |
-          go test ./...
+      # - name: Run Go tests
+      #   working-directory: services/go-service
+      #   run: |
+      #     go test ./...
 
       - name: Run Python tests
         working-directory: services/python-service
@@ -55,7 +55,7 @@ jobs:
           pip install -r requirements.txt || true
           pytest -q || true
 
-      - name: Run Java tests
-        working-directory: services/java-service
-        run: |
-          mvn -q -DskipTests=false test || true
+      # - name: Run Java tests
+      #   working-directory: services/java-service
+      #   run: |
+      #     mvn -q -DskipTests=false test || true

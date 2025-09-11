@@ -50,20 +50,35 @@ install-ts:
 	cd services/typescript-service && npm install
 
 # ==========================
+# Python
+# ==========================
+lint-py:
+	cd services/python-service && python -m flake8 . --max-line-length=100
+
+format-py:
+	cd services/python-service && python -m black . --line-length=100
+
+test-py:
+	cd services/python-service && python -m pytest --cov=. --cov-report=term-missing
+
+install-py:
+	cd services/python-service && pip install -r requirements.txt
+
+# ==========================
 # Aggregates
 # ==========================
-lint: lint-ts
+lint: lint-ts lint-py
 	@echo "✅ All linters passed"
 
-format: format-ts
+format: format-ts format-py
 	@echo "✅ All code formatted"
 
-test: test-ts
+test: test-ts test-py
 	@echo "✅ All tests passed"
 
 clean:
 	rm -rf **/dist **/build **/.pytest_cache **/__pycache__ **/.mypy_cache **/.coverage
 	@echo "🧹 Cleaned build artifacts"
 
-install: install-ts
+install: install-ts install-py
 	@echo "📦 Dependencies installed for all services"
